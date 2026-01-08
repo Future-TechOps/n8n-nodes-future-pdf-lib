@@ -12,7 +12,7 @@ const fs = require('fs');
 export class FuturepdfLib implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'PDF-LIB',
-		name: 'FuturepdfLib',
+		name: 'futurepdfLib',
 		icon: 'file:PdfLib.svg',
 		group: ['transform'],
 		version: 1,
