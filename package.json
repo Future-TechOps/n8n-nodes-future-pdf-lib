@@ -35,7 +35,7 @@
         "strict": true,
         "credentials": [],
         "nodes": [
-            "dist/nodes/PdfLib/PdfLib.node.js"
+            "dist/nodes/FuturePdfLib/FuturePdfLib.node.js"
         ]
     },
     "devDependencies": {
