@@ -1,3 +1,3 @@
 module.exports = {
-    nodes: [require('./dist/nodes/FuturePdfLib/FuturePdfLib.node.js')],
+	nodes: [require('./dist/nodes/PdfLib/PdfLib.node.js')],
 };

@@ -1,4 +1,4 @@
-# n8n-nodes-future-pdf-lib
+# n8n-nodes-pdf-lib
 
 This is an n8n community node package. It lets you use PDF utilities in your n8n workflows.
 
@@ -24,7 +24,6 @@ This package provides the following node:
 - **PDF-LIB**: A unified node that allows you to choose between different PDF operations:
   - **Get PDF Info**: Extracts information from a PDF file, such as the page count. Input: binary PDF. Output: JSON with pageCount.
   - **Split PDF**: Splits a PDF into chunks of pages. Input: binary PDF and chunk size (default 1). Output: multiple binary PDFs, each with the specified number of pages.
-  - **Code PDF-LIB**: Execute custom code for PDF-LIB operations.
 
 ## Compatibility
 
@@ -37,7 +36,6 @@ This package provides the following node:
 - **PDF-LIB**: Use this unified node to perform different PDF operations. Select the operation from the dropdown:
   - **Get PDF Info**: Extract the number of pages from a PDF file. Pass the PDF as a binary property (default: `data`).
   - **Split PDF**: Split a PDF into chunks of pages. Set the chunk size as needed.
-  - **Code PDF-LIB**: Execute custom code for PDF-LIB operations.
 
 The node expects the PDF input as a binary property. You can use n8n's built-in nodes to fetch or generate PDF files before processing them with this node.
 

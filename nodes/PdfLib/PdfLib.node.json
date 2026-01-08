@@ -1,10 +1,8 @@
 {
-	"node": "n8n-nodes-future-pdf-lib.FuturePdfLib",
+	"node": "n8n-nodes-pdf-lib.PdfLib",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": [
-		"Core Nodes"
-	],
+	"categories": ["Core Nodes"],
 	"icon": "file:PdfLib.svg",
 	"resources": {
 		"primaryDocumentation": [
