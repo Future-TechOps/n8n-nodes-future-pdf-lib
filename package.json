@@ -19,11 +19,11 @@
         "node": ">=20.15"
     },
     "scripts": {
-        "build": "n8n-node build",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "build": "tsc -p tsconfig.json",
         "build:watch": "tsc --watch",
         "dev": "n8n-node dev",
-        "lint": "n8n-node lint",
-        "lint:fix": "n8n-node lint --fix",
         "release": "n8n-node release",
         "prepublishOnly": "n8n-node prerelease"
     },
@@ -39,12 +39,15 @@
         ]
     },
     "devDependencies": {
+        "@eslint/js": "^9.39.2",
         "@n8n/node-cli": "*",
         "@types/node": "^25.0.3",
         "eslint": "9.32.0",
+        "globals": "^17.0.0",
         "prettier": "3.6.2",
         "release-it": "^19.0.4",
-        "typescript": "5.9.2"
+        "typescript": "5.9.2",
+        "typescript-eslint": "^8.52.0"
     },
     "peerDependencies": {
         "n8n-workflow": "*"
@@ -52,5 +55,8 @@
     "dependencies": {
         "buffer": "^6.0.3",
         "pdf-lib": "^1.17.1"
+    },
+    "overrides": {
+        "change-case": "4.1.2"
     }
 }

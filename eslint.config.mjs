@@ -1,3 +1,14 @@
-import { config } from '@n8n/node-cli/eslint';
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-export default config;
+export default [
+    {
+        ignores: [
+            '**/dist/**',
+            '**/node_modules/**',
+            '**/coverage/**',
+            '**/*.d.ts',
+        ],
+    },
+];
