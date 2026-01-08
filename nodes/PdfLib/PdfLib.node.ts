@@ -13,7 +13,7 @@ import * as fs from 'fs';
 
 export class PdfLib implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'PDF-LIB',
+		displayName: 'Future PDF-LIB',
 		name: 'FuturePdfLib',
 		icon: 'file:PdfLib.svg',
 		group: ['transform'],
