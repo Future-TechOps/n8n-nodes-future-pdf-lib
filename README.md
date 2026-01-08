@@ -1,4 +1,4 @@
-# n8n-nodes-pdf-lib
+# n8n-nodes-future-pdf-lib
 
 This is an n8n community node package. It lets you use PDF utilities in your n8n workflows.
 

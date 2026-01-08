@@ -9,10 +9,10 @@ const { PDFDocument } = require('../../lib/pdf-lib/pdf-lib.min.js');
 import { Buffer } from 'buffer';
 const fs = require('fs');
 
-export class PdfLib implements INodeType {
+export class futurepdfLib implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'PDF-LIB',
-		name: 'pdfLib',
+		name: 'futurepdfLib',
 		icon: 'file:PdfLib.svg',
 		group: ['transform'],
 		version: 1,
