@@ -145,7 +145,11 @@ export class FuturepdfLib implements INodeType {
 						const binaryData: any = item.binary[binaryPropertyName];
 
 						if (!binaryData?.directory || !binaryData?.fileName) {
-							throw new Error('Binary item missing directory or fileName');
+							throw new NodeOperationError(
+								this.getNode(),
+								`No binary data found in property on item`,
+								{ itemIndex },
+							);
 						}
 
 						const filePath = `${binaryData.directory}/${binaryData.fileName}`;
