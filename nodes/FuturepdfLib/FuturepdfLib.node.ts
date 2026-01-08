@@ -49,18 +49,24 @@ const CODE128_PATTERNS: string[] = [
 ];
 
 // Start Code B = 104, Stop = 106
-function code128BEncode(text: string): number[] {
-	// Validate (subset B: ASCII 32–127)
+function code128BEncode(
+	text: string,
+	nodeThis: any,
+	NodeOperationError: any,
+): number[] {
 	for (let i = 0; i < text.length; i++) {
 		const c = text.charCodeAt(i);
 		if (c < 32 || c > 127) {
-			throw new Error(`CODE128-B only supports ASCII 32–127. Bad char at index ${i}.`);
+			throw new NodeOperationError(
+				nodeThis,
+				`CODE128-B only supports ASCII 32–127. Invalid character at index ${i}.`,
+			);
 		}
 	}
 
 	const codes: number[] = [];
 	for (let i = 0; i < text.length; i++) {
-		codes.push(text.charCodeAt(i) - 32); // 0..95
+		codes.push(text.charCodeAt(i) - 32);
 	}
 
 	let checksum = 104; // Start B
@@ -72,13 +78,23 @@ function code128BEncode(text: string): number[] {
 	return [104, ...codes, checksum, 106];
 }
 
-function code128TotalModules(symbolCodes: number[]): number {
+function code128TotalModules(
+	symbolCodes: number[],
+	nodeThis: any,
+	NodeOperationError: any,
+): number {
 	let total = 0;
 
 	for (let i = 0; i < symbolCodes.length; i++) {
 		const code = symbolCodes[i];
 		const pattern = CODE128_PATTERNS[code];
-		if (!pattern) throw new Error(`Invalid CODE128 pattern index: ${code}`);
+
+		if (!pattern) {
+			throw new NodeOperationError(
+				nodeThis,
+				`Invalid CODE128 pattern index: ${code}`,
+			);
+		}
 
 		for (let j = 0; j < pattern.length; j++) {
 			total += Number(pattern[j]);
@@ -89,33 +105,51 @@ function code128TotalModules(symbolCodes: number[]): number {
 }
 
 /**
- * Draw CODE128-B barcode on a pdf-lib page using rectangles
- *
- * @param page pdf-lib Page instance
- * @param text string to encode (ASCII 32–127)
- * @param opts positioning + sizing options
+ * Draw CODE128-B barcode on a pdf-lib page
  */
-function drawCode128B(page: any, text: string, opts: DrawCode128BOptions): DrawCode128BResult {
+function drawCode128B(
+	page: any,
+	text: string,
+	opts: DrawCode128BOptions,
+	nodeThis: any,
+	NodeOperationError: any,
+): DrawCode128BResult {
+	if (!page) {
+		throw new NodeOperationError(nodeThis, 'drawCode128B: page is required');
+	}
+
+	if (!opts || typeof opts !== 'object') {
+		throw new NodeOperationError(nodeThis, 'drawCode128B: options object is required');
+	}
+
+	if (typeof opts.rgb !== 'function') {
+		throw new NodeOperationError(
+			nodeThis,
+			'drawCode128B requires opts.rgb (pdf-lib rgb)',
+		);
+	}
+
 	const x = Number(opts.x) || 0;
 	const y = Number(opts.y) || 0;
 	const width = Number(opts.width) || 200;
 	const height = Number(opts.height) || 50;
 
-	const quietZoneModules = (opts.quietZoneModules ?? 10);
-	const rgbFn = opts.rgb;
+	const quietZoneModules = opts.quietZoneModules ?? 10;
+	const color = opts.color || opts.rgb(0, 0, 0);
 
-	if (typeof rgbFn !== 'function') {
-		throw new Error('drawCode128B requires opts.rgb (pdf-lib rgb).');
+	const symbols = code128BEncode(text, nodeThis, NodeOperationError);
+	const dataModules = code128TotalModules(symbols, nodeThis, NodeOperationError);
+	const totalModules = dataModules + quietZoneModules * 2;
+
+	if (totalModules <= 0) {
+		throw new NodeOperationError(
+			nodeThis,
+			'Computed barcode width is invalid (totalModules <= 0)',
+		);
 	}
 
-	const color = opts.color || rgbFn(0, 0, 0);
-
-	const symbols = code128BEncode(text);
-	const dataModules = code128TotalModules(symbols);
-	const totalModules = dataModules + (quietZoneModules * 2);
-
 	const moduleW = width / totalModules;
-	let cursorX = x + (quietZoneModules * moduleW);
+	let cursorX = x + quietZoneModules * moduleW;
 
 	for (let s = 0; s < symbols.length; s++) {
 		const pattern = CODE128_PATTERNS[symbols[s]];
@@ -146,6 +180,7 @@ function drawCode128B(page: any, text: string, opts: DrawCode128BOptions): DrawC
 		quietZoneModules,
 	};
 }
+
 
 
 export class FuturepdfLib implements INodeType {
@@ -321,7 +356,7 @@ export class FuturepdfLib implements INodeType {
 							width: 300,
 							height: 80,
 							rgb, // comes from ctx
-						});
+						}, this, NodeOperationError);
 					case 'getInfo':
 						// Get PDF Info operation
 						const pageCount = pdfDoc.getPageCount();
