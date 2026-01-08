@@ -5,7 +5,9 @@ import type {
 	INodeTypeDescription,
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError } from 'n8n-workflow';
-const { PDFDocument } = require('../../lib/pdf-lib/pdf-lib.min.js');
+var JsBarcode = require('jsbarcode');
+var { createCanvas } = require("canvas");
+const { PDFDocument, StandardFonts, rgb, degrees } = require('../../lib/pdf-lib/pdf-lib.min.js');
 import { Buffer } from 'buffer';
 const fs = require('fs');
 
