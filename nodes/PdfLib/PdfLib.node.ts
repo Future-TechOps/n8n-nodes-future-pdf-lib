@@ -42,6 +42,12 @@ export class PdfLib implements INodeType {
 						description: 'Split a PDF into chunks of pages',
 						action: 'Split a PDF into chunks of pages',
 					},
+					{
+						name: 'Code PDF-LIB',
+						value: 'code',
+						description: 'Execute custom code for PDF-LIB operations',
+						action: 'Execute custom code for PDF-LIB operations'
+					}
 				],
 				default: 'getInfo',
 			},
@@ -53,7 +59,7 @@ export class PdfLib implements INodeType {
 				description: 'Name of the binary property containing the PDF file',
 				displayOptions: {
 					show: {
-						operation: ['getInfo', 'split'],
+						operation: ['getInfo', 'split', 'code'],
 					},
 				},
 			},
@@ -69,6 +75,23 @@ export class PdfLib implements INodeType {
 					},
 				},
 			},
+			{
+				displayName: 'PDF-LIB Direct',
+				name: 'pdf-code',
+				type: 'string',
+				typeOptions: {
+					editor: 'codeNodeEditor',
+					editorLanguage: 'javaScript',
+					rows: 20,
+				},
+				default: "",
+				description: 'Direct Code Input for PDF-LIB',
+				displayOptions: {
+					show: {
+						operation: ['code'],
+					},
+				},
+			}
 		],
 	};
 
@@ -133,6 +156,76 @@ export class PdfLib implements INodeType {
 						});
 						break;
 
+					case 'code':
+						const userCode = this.getNodeParameter('pdf-code', itemIndex) as string;
+
+						const runUserCode = new Function(
+							'ctx',
+							`
+"use strict";
+return (async () => {
+  const {
+    // n8n context helpers
+    nodeThis,
+    NodeOperationError,
+
+    // current loop context
+    items,
+    item,
+    itemIndex,
+    operation,
+    binaryPropertyName,
+
+    // pdf context
+    pdfDoc,
+    fileBytes,
+    PDFDocument,
+
+    // node/std utils
+    Buffer,
+    fs,
+
+    // output accumulator
+    returnData,
+  } = ctx;
+
+  // Re-expose common n8n methods on the expected 'this'
+  const $this = nodeThis;
+
+  // Make them available as 'this' for code that expects it
+  // and also as plain variables in scope
+  const helpers = $this.helpers;
+  const getNode = $this.getNode.bind($this);
+  const getNodeParameter = $this.getNodeParameter.bind($this);
+  const getInputData = $this.getInputData.bind($this);
+  const continueOnFail = $this.continueOnFail.bind($this);
+
+  ${userCode}
+})();
+`,
+						) as (ctx: any) => Promise<void>;
+
+						await runUserCode({
+							nodeThis: this,
+							NodeOperationError,
+
+							items,
+							item,
+							itemIndex,
+							operation,
+							binaryPropertyName,
+
+							pdfDoc,
+							fileBytes,
+							PDFDocument,
+
+							Buffer,
+							fs,
+
+							returnData,
+						});
+
+						break;
 					case 'split':
 						// Split PDF operation
 						const chunkSize = this.getNodeParameter('chunkSize', itemIndex, 1) as number;

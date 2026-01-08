@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-future-pdf-lib",
-	"version": "1.0.7",
+	"version": "1.0.9",
 	"description": "PDF Library for n8n",
 	"keywords": [
 		"n8n-community-node-package"
