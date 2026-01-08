@@ -398,6 +398,10 @@ return (async () => {
     // node/std utils
     Buffer,
     fs,
+	rgb,
+	StandardFonts,
+	degrees,
+	drawCode128B,
 
     // output accumulator
     returnData,
@@ -432,8 +436,13 @@ return (async () => {
 							pdfDoc,
 							fileBytes,
 							PDFDocument,
+							rgb,
+							StandardFonts,
+							degrees,
 
 							Buffer,
+							// barcode helper
+							drawCode128B,
 							fs,
 
 							returnData,
