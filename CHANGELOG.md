@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.7 (2026-01-08)
+
 ### [0.1.5](https://github.com/vvcent/n8n-nodes-pdf-lib/compare/v0.1.4...v0.1.5) (2025-07-29)
 
 
