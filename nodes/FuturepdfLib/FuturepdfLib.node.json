@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-future-pdf-lib.futurepdfLib",
+	"node": "n8n-nodes-future-pdf-lib.FuturepdfLib",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": [

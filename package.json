@@ -35,7 +35,7 @@
 		"n8nNodesApiVersion": 1,
 		"credentials": [],
 		"nodes": [
-			"dist/nodes/futurepdfLib/futurepdfLib.node.js"
+			"dist/nodes/FuturepdfLib/FuturepdfLib.node.js"
 		]
 	},
 	"devDependencies": {
