@@ -11,6 +11,12 @@ const { PDFDocument, StandardFonts, rgb, degrees } = require('../../lib/pdf-lib/
 import { Buffer } from 'buffer';
 const fs = require('fs');
 
+void JsBarcode;
+void createCanvas;
+void StandardFonts;
+void rgb;
+void degrees;
+
 export class FuturepdfLib implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'PDF-LIB',
