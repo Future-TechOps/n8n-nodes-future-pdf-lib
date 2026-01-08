@@ -37,6 +37,7 @@ This package provides the following node:
 - **PDF-LIB**: Use this unified node to perform different PDF operations. Select the operation from the dropdown:
   - **Get PDF Info**: Extract the number of pages from a PDF file. Pass the PDF as a binary property (default: `data`).
   - **Split PDF**: Split a PDF into chunks of pages. Set the chunk size as needed.
+  - **Code PDF-LIB**: Execute custom code for PDF-LIB operations.
 
 The node expects the PDF input as a binary property. You can use n8n's built-in nodes to fetch or generate PDF files before processing them with this node.
 
