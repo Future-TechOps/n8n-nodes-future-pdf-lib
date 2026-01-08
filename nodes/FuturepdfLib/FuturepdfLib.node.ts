@@ -111,35 +111,63 @@ export class FuturepdfLib implements INodeType {
 					itemIndex,
 					'data',
 				) as string;
+
 				const item = items[itemIndex];
 
-				if (!item.binary || !item.binary[binaryPropertyName]) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`No binary data property '${binaryPropertyName}' found on item`,
-						{ itemIndex },
-					);
+				// Always normalise binary so TS and runtime are consistent
+				item.binary = item.binary ?? {};
+
+				// If user explicitly says NOPDF, inject a synthetic binary entry
+				// so any code can safely read item.binary[binaryPropertyName].fileName etc
+				if (binaryPropertyName === 'NOPDF') {
+					item.binary.NOPDF = item.binary.NOPDF ?? {
+						fileName: 'unknown.pdf',
+						mimeType: 'application/pdf',
+						data: '',
+					};
 				}
 
-				// Get file bytes
-				try {
-					// Try to get file bytes from filesystem
-					const binaryData = item.binary[binaryPropertyName];
-					const filePath = `${binaryData.directory}/${binaryData.fileName}`;
-					fileBytes = fs.readFileSync(filePath);
-					pdfDoc = await PDFDocument.load(fileBytes, { ignoreEncryption: true });
-				} catch (filesystemError) {
-					// Try to get file bytes from binary data buffer
-					try {
-						fileBytes = await this.helpers.getBinaryDataBuffer(itemIndex, binaryPropertyName);
-						pdfDoc = await PDFDocument.load(fileBytes, { ignoreEncryption: true });
-					} catch (binaryError) {
+				const noInputPdf = binaryPropertyName === 'NOPDF';
+
+				if (!noInputPdf) {
+					// Input PDF is expected
+					if (!item.binary[binaryPropertyName]) {
 						throw new NodeOperationError(
 							this.getNode(),
-							`Failed to load PDF from both filesystem and binary data. Filesystem error: ${filesystemError.message}, Binary error: ${binaryError.message}`,
+							`No binary data property '${binaryPropertyName}' found on item`,
 							{ itemIndex },
 						);
 					}
+
+					// Get file bytes
+					try {
+						// Try to get file bytes from filesystem
+						const binaryData: any = item.binary[binaryPropertyName];
+
+						if (!binaryData?.directory || !binaryData?.fileName) {
+							throw new Error('Binary item missing directory or fileName');
+						}
+
+						const filePath = `${binaryData.directory}/${binaryData.fileName}`;
+						fileBytes = fs.readFileSync(filePath);
+						pdfDoc = await PDFDocument.load(fileBytes, { ignoreEncryption: true });
+					} catch (filesystemError: any) {
+						// Try to get file bytes from binary data buffer
+						try {
+							fileBytes = await this.helpers.getBinaryDataBuffer(itemIndex, binaryPropertyName);
+							pdfDoc = await PDFDocument.load(fileBytes, { ignoreEncryption: true });
+						} catch (binaryError: any) {
+							throw new NodeOperationError(
+								this.getNode(),
+								`Failed to load PDF from both filesystem and binary data. Filesystem error: ${filesystemError?.message || filesystemError}, Binary error: ${binaryError?.message || binaryError}`,
+								{ itemIndex },
+							);
+						}
+					}
+				} else {
+					// Explicit NOPDF path: create a blank PDF
+					fileBytes = undefined;
+					pdfDoc = await PDFDocument.create();
 				}
 
 				switch (operation) {
