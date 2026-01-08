@@ -11,7 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 import { Buffer } from 'buffer';
 import * as fs from 'fs';
 
-export class PdfLib implements INodeType {
+export class FuturePdfLib implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Future PDF-LIB',
 		name: 'FuturePdfLib',
