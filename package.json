@@ -49,9 +49,5 @@
 	},
 	"peerDependencies": {
 		"n8n-workflow": "*"
-	},
-	"dependencies": {
-		"canvas": "^3.2.0",
-		"jsbarcode": "^3.12.3"
 	}
 }
