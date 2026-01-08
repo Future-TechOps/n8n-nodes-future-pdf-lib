@@ -1,17 +1,16 @@
 # n8n-nodes-future-pdf-lib
 
-This is an n8n community node. It lets you use _app/service name_ in your n8n workflows.
+This is an n8n community node package. It lets you use PDF utilities in your n8n workflows.
 
-_App/service name_ is _one or two sentences describing the service this node integrates with_.
+PDF utilities for n8n allow you to extract information from PDF files and split PDFs into smaller documents, all within your workflow automation.
 
-[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-[Installation](#installation)
-[Operations](#operations)
-[Credentials](#credentials)
-[Compatibility](#compatibility)
-[Usage](#usage)
-[Resources](#resources)
+[Installation](#installation)  
+[Operations](#operations)  
+[Compatibility](#compatibility)  
+[Usage](#usage)  
+[Resources](#resources)  
 [Version history](#version-history)
 
 ## Installation
@@ -20,27 +19,32 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 
 ## Operations
 
-_List the operations supported by your node._
+This package provides the following node:
 
-## Credentials
-
-_If users need to authenticate with the app/service, provide details here. You should include prerequisites (such as signing up with the service), available authentication methods, and how to set them up._
+- **PDF-LIB**: A unified node that allows you to choose between different PDF operations:
+  - **Get PDF Info**: Extracts information from a PDF file, such as the page count. Input: binary PDF. Output: JSON with pageCount.
+  - **Split PDF**: Splits a PDF into chunks of pages. Input: binary PDF and chunk size (default 1). Output: multiple binary PDFs, each with the specified number of pages.
+  - **Code PDF-LIB**: Execute custom code for PDF-LIB operations.
 
 ## Compatibility
 
-_State the minimum n8n version, as well as which versions you test against. You can also include any known version incompatibility issues._
+- Requires n8n v1.0.0 or higher.
+- Developed and tested with Node.js 20+.
+- Uses the [pdf-lib](https://pdf-lib.js.org/) library for PDF processing.
 
 ## Usage
 
-_This is an optional section. Use it to help users with any difficult or confusing aspects of the node._
+- **PDF-LIB**: Use this unified node to perform different PDF operations. Select the operation from the dropdown:
+  - **Get PDF Info**: Extract the number of pages from a PDF file. Pass the PDF as a binary property (default: `data`).
+  - **Split PDF**: Split a PDF into chunks of pages. Set the chunk size as needed.
 
-_By the time users are looking for community nodes, they probably already know n8n basics. But if you expect new users, you can link to the [Try it out](https://docs.n8n.io/try-it-out/) documentation to help them get started._
+The node expects the PDF input as a binary property. You can use n8n's built-in nodes to fetch or generate PDF files before processing them with this node.
 
 ## Resources
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* _Link to app/service documentation._
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+- [pdf-lib documentation](https://pdf-lib.js.org/)
 
 ## Version history
 
-_This is another optional section. If your node has multiple versions, include a short description of available versions and what changed, as well as any compatibility impact._
+- 0.1.0: Initial release with GetPdfInfo and SplitPdf nodes.
